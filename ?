@@ -44,6 +44,7 @@ function PabloLib:Create(windowTitle, windowSubtitle, keybind)
         local TabButton = Instance.new("TextButton")
         TabButton.Parent = TabsFrame
         TabButton.Size = UDim2.new(1, 0, 0, 30)
+        TabButton.Position = UDim2.new(0, 0, (#TabsFrame:GetChildren() - 1) * 35, 0)
         TabButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
         TabButton.Text = tabName
         TabButton.TextColor3 = Color3.new(1, 1, 1)
@@ -51,9 +52,11 @@ function PabloLib:Create(windowTitle, windowSubtitle, keybind)
         TabButton.TextSize = 14
 
         -- Crear Frame del Tab
-        local TabContent = Instance.new("Frame")
+        local TabContent = Instance.new("ScrollingFrame")
         TabContent.Parent = ContentFrame
         TabContent.Size = UDim2.new(1, 0, 1, 0)
+        TabContent.CanvasSize = UDim2.new(0, 0, 0, 0) -- Ajuste dinámico
+        TabContent.ScrollBarThickness = 5
         TabContent.BackgroundTransparency = 1
         TabContent.Visible = false
 
@@ -69,7 +72,7 @@ function PabloLib:Create(windowTitle, windowSubtitle, keybind)
             local Button = Instance.new("TextButton")
             Button.Parent = TabContent
             Button.Size = UDim2.new(1, -20, 0, 30)
-            Button.Position = UDim2.new(0, 10, #TabContent:GetChildren() * 35, 0)
+            Button.Position = UDim2.new(0, 10, 0, (#TabContent:GetChildren() - 1) * 35)
             Button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
             Button.Text = buttonName
             Button.TextColor3 = Color3.new(1, 1, 1)
@@ -77,6 +80,9 @@ function PabloLib:Create(windowTitle, windowSubtitle, keybind)
             Button.TextSize = 14
 
             Button.MouseButton1Click:Connect(callback)
+
+            -- Ajustar CanvasSize dinámicamente
+            TabContent.CanvasSize = UDim2.new(0, 0, 0, (#TabContent:GetChildren() - 1) * 35)
         end
 
         return buttons
