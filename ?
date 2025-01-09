@@ -1,0 +1,88 @@
+local PabloLib = {}
+
+-- Crear una ventana principal
+function PabloLib:Create(windowTitle, windowSubtitle, keybind)
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.Name = "CustomUI"
+
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Parent = ScreenGui
+    MainFrame.Size = UDim2.new(0, 400, 0, 300)
+    MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    MainFrame.BorderSizePixel = 0
+    MainFrame.Visible = true
+
+    -- Título
+    local Title = Instance.new("TextLabel")
+    Title.Parent = MainFrame
+    Title.Size = UDim2.new(1, 0, 0, 50)
+    Title.Position = UDim2.new(0, 0, 0, 0)
+    Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    Title.Text = windowTitle .. " - " .. windowSubtitle
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 18
+    Title.TextColor3 = Color3.new(1, 1, 1)
+
+    -- Tabs Holder
+    local TabsFrame = Instance.new("Frame")
+    TabsFrame.Parent = MainFrame
+    TabsFrame.Size = UDim2.new(0, 100, 1, -50)
+    TabsFrame.Position = UDim2.new(0, 0, 0, 50)
+    TabsFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+    local ContentFrame = Instance.new("Frame")
+    ContentFrame.Parent = MainFrame
+    ContentFrame.Size = UDim2.new(1, -100, 1, -50)
+    ContentFrame.Position = UDim2.new(0, 100, 0, 50)
+    ContentFrame.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+
+    local tabs = {}
+    function tabs:CreateTab(tabName)
+        -- Crear botón de Tab
+        local TabButton = Instance.new("TextButton")
+        TabButton.Parent = TabsFrame
+        TabButton.Size = UDim2.new(1, 0, 0, 30)
+        TabButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+        TabButton.Text = tabName
+        TabButton.TextColor3 = Color3.new(1, 1, 1)
+        TabButton.Font = Enum.Font.Gotham
+        TabButton.TextSize = 14
+
+        -- Crear Frame del Tab
+        local TabContent = Instance.new("Frame")
+        TabContent.Parent = ContentFrame
+        TabContent.Size = UDim2.new(1, 0, 1, 0)
+        TabContent.BackgroundTransparency = 1
+        TabContent.Visible = false
+
+        TabButton.MouseButton1Click:Connect(function()
+            for _, frame in pairs(ContentFrame:GetChildren()) do
+                frame.Visible = false
+            end
+            TabContent.Visible = true
+        end)
+
+        local buttons = {}
+        function buttons:CreateButton(buttonName, callback)
+            local Button = Instance.new("TextButton")
+            Button.Parent = TabContent
+            Button.Size = UDim2.new(1, -20, 0, 30)
+            Button.Position = UDim2.new(0, 10, #TabContent:GetChildren() * 35, 0)
+            Button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+            Button.Text = buttonName
+            Button.TextColor3 = Color3.new(1, 1, 1)
+            Button.Font = Enum.Font.Gotham
+            Button.TextSize = 14
+
+            Button.MouseButton1Click:Connect(callback)
+        end
+
+        return buttons
+    end
+
+    return tabs
+end
+
+return PabloLib
