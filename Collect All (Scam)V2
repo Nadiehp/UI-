@@ -1,0 +1,68 @@
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0.2, 0, 0.2, 0)
+frame.Position = UDim2.new(0.35, 0, 0.4, 0)
+frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+frame.Active = true
+frame.Draggable = true
+frame.Parent = screenGui
+
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0.1, 0)
+frameCorner.Parent = frame
+
+game:GetService("StarterGui"):SetCore("SendNotification", { 
+    Title = "Executed"; 
+    Text = "By NbHp"; 
+    Icon = ""; 
+    Duration = 4
+})
+
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0.8, 0, 0.5, 0)
+button.Position = UDim2.new(0.1, 0, 0.25, 0)
+button.Text = "Collect all"
+button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.Parent = frame
+
+local buttonCorner = Instance.new("UICorner")
+buttonCorner.CornerRadius = UDim.new(0.2, 0)
+buttonCorner.Parent = button
+
+button.MouseButton1Click:Connect(function()
+local player = game.Players.LocalPlayer
+local droppedFolder = game.Workspace:FindFirstChild("Dropped")
+
+local function getAllCFrameObjects(model)
+    local objects = {}
+    for _, descendant in ipairs(model:GetDescendants()) do
+        if descendant:IsA("BasePart") or descendant:IsA("Model") then
+            if descendant:IsA("Model") and descendant.PrimaryPart then
+                table.insert(objects, descendant.PrimaryPart)
+            elseif descendant:IsA("BasePart") then
+                table.insert(objects, descendant)
+            end
+        end
+    end
+    return objects
+end
+
+if droppedFolder then
+    for _, item in ipairs(droppedFolder:GetChildren()) do
+        local owner = item:FindFirstChild("Owner", true)
+        local cframeObjects = getAllCFrameObjects(item)
+
+        if #cframeObjects > 0 and owner and owner:IsA("ObjectValue") and owner.Value == player then
+            for _, obj in ipairs(cframeObjects) do
+                obj.CFrame = player.Character.HumanoidRootPart.CFrame
+                obj.CanCollide = false
+            end
+        end
+    end
+end
+
+end)
