@@ -72,10 +72,10 @@ button.MouseButton1Click:Connect(function()
     end
 end)
 
--- Segundo botón: Ejecuta de forma repetitiva el script del primer botón
+
 local button2 = Instance.new("TextButton")
 button2.Size = UDim2.new(0.8, 0, 0.3, 0)
-button2.Position = UDim2.new(0.1, 0, 0.52, 0)  -- Asegúrate de que la posición encaje en tu frame
+button2.Position = UDim2.new(0.1, 0, 0.52, 0)
 button2.Text = "Fake Jump: OFF"
 button2.BackgroundColor3 = Color3.fromRGB(100, 50, 50)
 button2.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -107,26 +107,23 @@ local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 local rootPart = character:WaitForChild("HumanoidRootPart")
 
--- Cargar y reproducir la animación de salto
 local jumpAnim = Instance.new("Animation")
-jumpAnim.AnimationId = "rbxassetid://507765000"  -- ID de la animación de salto
+jumpAnim.AnimationId = "rbxassetid://507765000"
 local jumpTrack = humanoid:LoadAnimation(jumpAnim)
 jumpTrack.Priority = Enum.AnimationPriority.Action
 jumpTrack:Play()
 
--- Aplicar un impulso ascendente para la elevación
 local upwardForce = Instance.new("BodyVelocity")
-upwardForce.Velocity = Vector3.new(0, 27, 0)   -- Ajusta este valor para la fuerza deseada
+upwardForce.Velocity = Vector3.new(0, 27, 0)
 upwardForce.MaxForce = Vector3.new(0, 5000, 0)
 upwardForce.Parent = rootPart
 
--- Después de 0.15 segundos se elimina la fuerza para que la gravedad haga el resto (caída natural)
 delay(0.2, function()
     upwardForce:Destroy()
     jumpTrack:Stop()
     print("Impulso finalizado, la gravedad hará que el personaje caiga naturalmente.")
 end)
-                task.wait(1)  -- Espera 2 segundos entre ejecuciones
+                task.wait(1)
             end
         end)
     else
