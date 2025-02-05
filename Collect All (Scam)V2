@@ -34,35 +34,40 @@ buttonCorner.CornerRadius = UDim.new(0.2, 0)
 buttonCorner.Parent = button
 
 button.MouseButton1Click:Connect(function()
-local player = game.Players.LocalPlayer
-local droppedFolder = game.Workspace:FindFirstChild("Dropped")
+    local targetCFrame = CFrame.new(
+        53.9190788, -196.728088, -224.225708, 
+        -0.837744415, 0.202916488, -0.50696075, 
+        2.08965189e-11, 0.928393185, 0.371599346, 
+        0.546062529, 0.311305285, -0.777756214
+    )
 
-local function getAllCFrameObjects(model)
-    local objects = {}
-    for _, descendant in ipairs(model:GetDescendants()) do
-        if descendant:IsA("BasePart") or descendant:IsA("Model") then
-            if descendant:IsA("Model") and descendant.PrimaryPart then
-                table.insert(objects, descendant.PrimaryPart)
-            elseif descendant:IsA("BasePart") then
-                table.insert(objects, descendant)
+    local droppedFolder = game.Workspace:FindFirstChild("Dropped")
+
+    local function getAllCFrameObjects(model)
+        local objects = {}
+        for _, descendant in ipairs(model:GetDescendants()) do
+            if descendant:IsA("BasePart") or descendant:IsA("Model") then
+                if descendant:IsA("Model") and descendant.PrimaryPart then
+                    table.insert(objects, descendant.PrimaryPart)
+                elseif descendant:IsA("BasePart") then
+                    table.insert(objects, descendant)
+                end
+            end
+        end
+        return objects
+    end
+
+    if droppedFolder then
+        for _, item in ipairs(droppedFolder:GetChildren()) do
+            local owner = item:FindFirstChild("Owner", true)
+            local cframeObjects = getAllCFrameObjects(item)
+
+            if #cframeObjects > 0 and owner and owner:IsA("ObjectValue") and owner.Value == player then
+                for _, obj in ipairs(cframeObjects) do
+                    obj.CFrame = targetCFrame
+                    obj.CanCollide = false
+                end
             end
         end
     end
-    return objects
-end
-
-if droppedFolder then
-    for _, item in ipairs(droppedFolder:GetChildren()) do
-        local owner = item:FindFirstChild("Owner", true)
-        local cframeObjects = getAllCFrameObjects(item)
-
-        if #cframeObjects > 0 and owner and owner:IsA("ObjectValue") and owner.Value == player then
-            for _, obj in ipairs(cframeObjects) do
-                obj.CFrame = player.Character.HumanoidRootPart.CFrame
-                obj.CanCollide = false
-            end
-        end
-    end
-end
-
 end)
