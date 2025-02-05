@@ -96,32 +96,35 @@ button2.MouseButton1Click:Connect(function()
         
         autoCollectLoop = task.spawn(function()
             while autoCollect do
-           local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-if not player then
-    warn("No se encontró LocalPlayer.")
-    return
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local remoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
+
+for _, obj in ipairs(remoteEvents:GetChildren()) do
+    if obj.Name == "Jumped" then
+        obj.Name = "FJumped"
+    end
 end
 
+local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
-local rootPart = character:WaitForChild("HumanoidRootPart")
 
-local jumpAnim = Instance.new("Animation")
-jumpAnim.AnimationId = "rbxassetid://507765000"
-local jumpTrack = humanoid:LoadAnimation(jumpAnim)
-jumpTrack.Priority = Enum.AnimationPriority.Action
-jumpTrack:Play()
+humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 
-local upwardForce = Instance.new("BodyVelocity")
-upwardForce.Velocity = Vector3.new(0, 27, 0)
-upwardForce.MaxForce = Vector3.new(0, 5000, 0)
-upwardForce.Parent = rootPart
+if _G.jumpRequestConnection then
+    _G.jumpRequestConnection:Disconnect()
+end
 
-delay(0.2, function()
-    upwardForce:Destroy()
-    jumpTrack:Stop()
-    print("Impulso finalizado, la gravedad hará que el personaje caiga naturalmente.")
+_G.jumpRequestConnection = UserInputService.JumpRequest:Connect(function()
+    for _, obj in ipairs(remoteEvents:GetChildren()) do
+        if obj.Name == "FJumped" then
+            obj.Name = "Jumped"
+        end
+    end
 end)
                 task.wait(1)
             end
