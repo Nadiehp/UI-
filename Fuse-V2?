@@ -1,0 +1,8 @@
+local placeId = game.PlaceId
+
+if placeId == 7346416636 then
+    loadstring(game:HttpGet(""))()
+
+elseif placeId == 7503115095 then
+loadstring(game:HttpGet(""))()
+end
